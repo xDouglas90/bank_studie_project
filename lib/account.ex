@@ -3,6 +3,7 @@ defmodule Account do
   Module that creates a new account based on the `struct` of `User module`.
   """
   defstruct user: User, balance: 1000
+  @accounts "accounts.txt"
 
   @doc """
   Function that creates a new account receiving data from the `User module` and passing a `balance` as a parameter,
@@ -15,8 +16,18 @@ defmodule Account do
 
   """
   def register_user(user) do
-    %__MODULE__{user: user}
+    accounts = get_accounts()
+    binary = [%__MODULE__{user: user}] ++ accounts
+    |> :erlang.term_to_binary()
+    File.write(@accounts, binary)
   end
+
+  def get_accounts do
+    {:ok, binary} = File.read(@accounts)
+    :erlang.binary_to_term(binary)
+  end
+
+  def get_by_email(email), do: Enum.find(get_accounts(), &(&1.user.email == email))
 
   @doc """
   Function that when passing a `list of accounts`,
@@ -71,7 +82,6 @@ defmodule Account do
       [from, to]
     end
   end
-
 
   @doc """
   Function that when passing an `account` and a `value` as parameters,

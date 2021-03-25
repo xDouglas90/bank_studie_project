@@ -1,6 +1,6 @@
 defmodule Bank do
   @moduledoc """
-  Mini Project with the objective of learning and reinforcing Elixir's knowledge..
+  Mini Project with the objective of learning and reinforcing Elixir's knowledge.
   """
 
   @doc """
