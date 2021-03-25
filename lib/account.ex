@@ -61,12 +61,13 @@ defmodule Account do
   def transfer(accounts, from, to, value) do
     from = Enum.find(accounts, fn account -> account.user.email == from.user.email end)
 
-    cond do
-      balance_validate(from.balance, value) -> {:error, "Insufficient funds!"}
-      true ->
-        to = Enum.find(accounts, fn account -> account.user.email == to.user.email end)
-        from = %Account{from | balance: from.balance - value}
-        to = %Account{to | balance: to.balance + value}
+    if balance_validate(from.balance, value) == true
+    do
+      {:error, "Insufficient funds!"}
+    else
+      to = Enum.find(accounts, fn account -> account.user.email == to.user.email end)
+      from = %Account{from | balance: from.balance - value}
+      to = %Account{to | balance: to.balance + value}
       [from, to]
     end
   end
@@ -74,7 +75,7 @@ defmodule Account do
 
   @doc """
   Function that when passing an `account` and a `value` as parameters,
-  this value being less than or equal to the one existing in the balance,
+  while this value being less than or equal to the one existing in the balance,
   `makes the withdrawal`.
 
   ## Examples
@@ -91,9 +92,10 @@ defmodule Account do
         }, "Withdrawal successful. Message forwarded by email!"}
   """
   def withdraw(account, value) do
-    cond do
-      balance_validate(account.balance, value) -> {:error, "Insufficient funds!"}
-      true ->
+    if balance_validate(account.balance, value) == true
+    do
+      {:error, "Insufficient funds!"}
+    else
         account = %Account{account | balance: account.balance - value}
         {:ok, account, "Withdrawal successful. Message forwarded by email!"}
     end
