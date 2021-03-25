@@ -19,9 +19,9 @@ defmodule Account do
   end
 
   @doc """
-  Function that when passing a list of accounts as parameters,
-  account that will transfer, account that you will receive and the amount,
-  performs the transfer of amounts,
+  Function that when passing a `list of accounts`,
+  `account that will transfer`, `account that you will receive` and the `amount` as parameters,
+  performs the `transfer of amounts`,
   making sure the amount is not above the existing balance.
 
   ## Examples
@@ -57,7 +57,6 @@ defmodule Account do
           user: %User{email: "anacfreire2109@gmail.com", name: "Ana Cristina"}
         }
       ]
-
   """
   def transfer(accounts, from, to, value) do
     from = Enum.find(accounts, fn account -> account.user.email == from.user.email end)
@@ -72,6 +71,25 @@ defmodule Account do
     end
   end
 
+
+  @doc """
+  Function that when passing an `account` and a `value` as parameters,
+  this value being less than or equal to the one existing in the balance,
+  `makes the withdrawal`.
+
+  ## Examples
+      iex> account1 = Account.register_user(%User{name: "Douglas Oliveira", email: "xdouglas90@gmail.com"})
+      %Account{
+        balance: 1000,
+        user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
+      }
+      iex> Account.withdraw(account1, 10)
+      {:ok,
+        %Account{
+          balance: 990,
+          user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
+        }, "Withdrawal successful. Message forwarded by email!"}
+  """
   def withdraw(account, value) do
     cond do
       balance_validate(account.balance, value) -> {:error, "Insufficient funds!"}
