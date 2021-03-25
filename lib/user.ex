@@ -1,12 +1,12 @@
 defmodule User do
   @moduledoc """
-  Module that creates a new user based on the structure created.
+  Module that creates a new user based on the `struct` created.
   """
   defstruct name: nil, email: nil
 
   @doc """
-  Function that creates a new user by passing the name and email parameters,
-  according to the structure.
+  Function that creates a new user by passing the `name` and `email` parameters,
+  according to the `struct`.
 
   ## Examples
 
