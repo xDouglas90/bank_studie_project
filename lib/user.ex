@@ -6,7 +6,7 @@ defmodule User do
 
   @doc """
   Function that creates a new user by passing the `name` and `email` parameters,
-  according to the `struct`.
+  according to the struct `defstruct name: nil, email: nil`.
 
   ## Examples
 
@@ -14,8 +14,7 @@ defmodule User do
       %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
 
   """
-  def new_user(name, email) do
-    %__MODULE__{name: name, email: email}
-  end
+  def new_user(name, email), do: %__MODULE__{name: name, email: email}
+
 
 end
