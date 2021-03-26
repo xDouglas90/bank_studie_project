@@ -130,6 +130,42 @@ defmodule Transaction do
   def load_by_day(date), do: Enum.filter(load_transactions(), &(&1.date == date))
 
   @doc """
+  function that calculates the total value of all transactions made, using the data loaded by the function `load_transactions/0`.
+  Returns the transactions made and the total value in a tuple.
+  The calculation is done through a private function.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.total_transactions
+      {[
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        },
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ], 30}
+
+  """
+  def total_transactions() do
+    load_transactions()
+    |> calculate
+  end
+
+  @doc """
   function that calculates the total value of transactions made in the `month` informed
   as a parameter, using the data loaded by the function `load_by_month/2`.
   Returns the transactions made and the total value in a tuple.
