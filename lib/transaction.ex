@@ -162,8 +162,8 @@ defmodule Transaction do
 
   """
   def total_by_month(year, month) do
-    transactions = load_by_month(year, month)
-    {transactions, calculate(transactions)}
+    load_by_month(year, month)
+    |> calculate
   end
 
   @doc """
@@ -199,8 +199,8 @@ defmodule Transaction do
 
   """
   def total_by_year(year) do
-    transactions = load_by_year(year)
-    {transactions, calculate(transactions)}
+    load_by_year(year)
+    |> calculate
   end
 
   @doc """
@@ -236,12 +236,12 @@ defmodule Transaction do
 
   """
   def total_by_day(date) do
-    transactions = load_by_day(date)
-    {transactions, calculate(transactions)}
+    load_by_day(date)
+    |> calculate
   end
 
   defp calculate(transactions) do
-    Enum.reduce(transactions, 0, fn x, acc -> acc + x.value end)
+    {transactions, Enum.reduce(transactions, 0, fn x, acc -> acc + x.value end)}
   end
 
   defp get_transactions do
