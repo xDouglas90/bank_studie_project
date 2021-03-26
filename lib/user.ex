@@ -15,6 +15,4 @@ defmodule User do
 
   """
   def new_user(name, email), do: %__MODULE__{name: name, email: email}
-
-
 end

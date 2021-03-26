@@ -19,15 +19,18 @@ defmodule Account do
   """
   def register_user(user) do
     accounts = get_accounts()
+
     case get_by_email(user.email) do
       nil ->
-        binary = [%__MODULE__{user: user}] ++ accounts
-        |> :erlang.term_to_binary()
+        binary =
+          ([%__MODULE__{user: user}] ++ accounts)
+          |> :erlang.term_to_binary()
+
         File.write(@accounts, binary)
+
       _ ->
         {:error, "Account already registered!"}
     end
-
   end
 
   def get_accounts do
@@ -73,15 +76,23 @@ defmodule Account do
   def transfer(from, to, value) do
     from = get_by_email(from)
     to = get_by_email(to)
-    if balance_validate(from.balance, value) == true
-    do
+
+    if balance_validate(from.balance, value) == true do
       {:error, "Insufficient funds!"}
     else
       accounts = Account.delete([from, to])
       from = %Account{from | balance: from.balance - value}
       to = %Account{to | balance: to.balance + value}
       accounts = accounts ++ [from, to]
-      Transaction.save_transaction("Transfer", from.user.email, value, Date.utc_today(), to.user.email)
+
+      Transaction.save_transaction(
+        "Transfer",
+        from.user.email,
+        value,
+        Date.utc_today(),
+        to.user.email
+      )
+
       File.write(@accounts, :erlang.term_to_binary(accounts))
     end
   end
@@ -120,15 +131,15 @@ defmodule Account do
   """
   def withdraw(account, value) do
     account = get_by_email(account)
-    if balance_validate(account.balance, value) == true
-    do
+
+    if balance_validate(account.balance, value) == true do
       {:error, "Insufficient funds!"}
     else
-        accounts = Account.delete([account])
-        account = %Account{account | balance: account.balance - value}
-        accounts = accounts ++ [account]
-        File.write(@accounts, :erlang.term_to_binary(accounts))
-        {:ok, account, "Withdrawal successful. Message forwarded by email!"}
+      accounts = Account.delete([account])
+      account = %Account{account | balance: account.balance - value}
+      accounts = accounts ++ [account]
+      File.write(@accounts, :erlang.term_to_binary(accounts))
+      {:ok, account, "Withdrawal successful. Message forwarded by email!"}
     end
   end
 
