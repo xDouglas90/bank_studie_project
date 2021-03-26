@@ -81,6 +81,7 @@ defmodule Account do
       from = %Account{from | balance: from.balance - value}
       to = %Account{to | balance: to.balance + value}
       accounts = accounts ++ [from, to]
+      Transaction.save_transaction("Transfer", from.user.email, value, Date.utc_today(), to.user.email)
       File.write(@accounts, :erlang.term_to_binary(accounts))
     end
   end
