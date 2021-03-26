@@ -22,12 +22,12 @@ defmodule Account do
     File.write(@accounts, binary)
   end
 
-  def get_accounts do
+  defp get_accounts do
     {:ok, binary} = File.read(@accounts)
     :erlang.binary_to_term(binary)
   end
 
-  def get_by_email(email), do: Enum.find(get_accounts(), &(&1.user.email == email))
+  defp get_by_email(email), do: Enum.find(get_accounts(), &(&1.user.email == email))
 
   @doc """
   Function that when passing a `list of accounts`,
@@ -69,14 +69,14 @@ defmodule Account do
         }
       ]
   """
-  def transfer(accounts, from, to, value) do
-    from = Enum.find(accounts, fn account -> account.user.email == from.user.email end)
+  def transfer(_accounts, from, to, value) do
+    from = get_by_email(from.user.email)
 
     if balance_validate(from.balance, value) == true
     do
       {:error, "Insufficient funds!"}
     else
-      to = Enum.find(accounts, fn account -> account.user.email == to.user.email end)
+      to = get_by_email(to.user.email)
       from = %Account{from | balance: from.balance - value}
       to = %Account{to | balance: to.balance + value}
       [from, to]
