@@ -70,19 +70,22 @@ defmodule Account do
       ]
   """
   def transfer(from, to, value) do
-    from = get_by_email(from.user.email)
+    from = get_by_email(from)
+    to = get_by_email(to)
     if balance_validate(from.balance, value) == true
     do
       {:error, "Insufficient funds!"}
     else
-      accounts = get_accounts()
-      accounts = List.delete(accounts, from)
-      accounts = List.delete(accounts, to)
+      accounts = Account.delete([from, to])
       from = %Account{from | balance: from.balance - value}
       to = %Account{to | balance: to.balance + value}
       accounts = accounts ++ [from, to]
       File.write(@accounts, :erlang.term_to_binary(accounts))
     end
+  end
+
+  def delete(accounts_delete) do
+    Enum.reduce(accounts_delete, get_accounts(), fn a, acc -> List.delete(acc, a) end)
   end
 
   @doc """
@@ -104,11 +107,15 @@ defmodule Account do
         }, "Withdrawal successful. Message forwarded by email!"}
   """
   def withdraw(account, value) do
+    account = get_by_email(account)
     if balance_validate(account.balance, value) == true
     do
       {:error, "Insufficient funds!"}
     else
+        accounts = Account.delete([account])
         account = %Account{account | balance: account.balance - value}
+        accounts = accounts ++ [account]
+        File.write(@accounts, :erlang.term_to_binary(accounts))
         {:ok, account, "Withdrawal successful. Message forwarded by email!"}
     end
   end
