@@ -30,7 +30,7 @@ defmodule Account do
 
   end
 
-  defp get_accounts do
+  def get_accounts do
     {:ok, binary} = File.read(@accounts)
     :erlang.binary_to_term(binary)
   end
@@ -44,28 +44,20 @@ defmodule Account do
   making sure the amount is not above the existing balance.
 
   ## Examples
-      iex> account1 = Account.register_user(%User{name: "Douglas Oliveira", email: "xdouglas90@gmail.com"})
-      %Account{
-        balance: 1000,
-        user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
-      }
-      iex> account2 = Account.register_user(%User{name: "Ana Cristina", email: "anacfreire2109@gmail.com"})
-      %Account{
-        balance: 1000,
-        user: %User{email: "anacfreire2109@gmail.com", name: "Ana Cristina"}
-      }
-      iex> accounts = [account1, account2]
-      [
+
+      iex> Account.transfer(
         %Account{
           balance: 1000,
-          user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
+          user: %User{
+            email: "xdouglas90@gmail.com",
+            name: "Douglas Oliveira"}
         },
         %Account{
           balance: 1000,
-          user: %User{email: "anacfreire2109@gmail.com", name: "Ana Cristina"}
-        }
-      ]
-      iex> Account.transfer(accounts, account1, account2, 100)
+          user: %User{
+            email: "anacfreire2109@gmail.com",
+            name: "Ana Cristina"}
+        }, 100)
       [
         %Account{
           balance: 900,
@@ -79,15 +71,17 @@ defmodule Account do
   """
   def transfer(from, to, value) do
     from = get_by_email(from.user.email)
-
     if balance_validate(from.balance, value) == true
     do
       {:error, "Insufficient funds!"}
     else
-      to = get_by_email(to.user.email)
+      accounts = get_accounts()
+      accounts = List.delete(accounts, from)
+      accounts = List.delete(accounts, to)
       from = %Account{from | balance: from.balance - value}
       to = %Account{to | balance: to.balance + value}
-      [from, to]
+      accounts = accounts ++ [from, to]
+      File.write(@accounts, :erlang.term_to_binary(accounts))
     end
   end
 
