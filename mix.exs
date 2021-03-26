@@ -1,4 +1,7 @@
 defmodule Bank.MixProject do
+  @moduledoc """
+  Module that specifies the dependencies of the project.
+  """
   use Mix.Project
 
   def project do
