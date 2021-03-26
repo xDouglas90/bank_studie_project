@@ -40,6 +40,12 @@ defmodule Transaction do
   """
   def load_transactions, do: get_transactions()
 
+  def load_by_year(), do: {:error, "Please enter a valid year."}
+
+  def load_by_year(year), do: Enum.filter(load_transactions(), &(&1.date.year == year))
+
+  def load_by_month(year, month), do: Enum.filter(load_transactions(), &(&1.date.year == year && &1.date.month == month))
+
   defp get_transactions do
     {:ok, binary} = File.read(@transactions)
     binary
