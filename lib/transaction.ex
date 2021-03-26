@@ -40,10 +40,66 @@ defmodule Transaction do
   """
   def load_transactions, do: get_transactions()
 
+  @doc """
+  Function that returns an error and a message in case of user call the function
+  but do not put any year as a parameter.
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.load_by_year
+      {:error, "Please enter a valid year."}
+
+  """
   def load_by_year(), do: {:error, "Please enter a valid year."}
 
+  @doc """
+  Function that loads the data from the file `transactions.txt`
+  by passing a `year` as parameter and shows on the console.
+  Data received from a private function that stores the transaction history.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.load_by_year 2021
+      [
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ]
+
+  """
   def load_by_year(year), do: Enum.filter(load_transactions(), &(&1.date.year == year))
 
+  @doc """
+  Function that loads the data from the file `transactions.txt`
+  by passing a `year` and a `month` as parameters and shows on the console.
+  Data received from a private function that stores the transaction history.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.load_by_year 2021, 03
+      [
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ]
+
+  """
   def load_by_month(year, month), do: Enum.filter(load_transactions(), &(&1.date.year == year && &1.date.month == month))
 
   defp get_transactions do
