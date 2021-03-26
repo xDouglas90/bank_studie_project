@@ -42,6 +42,7 @@ defmodule Account do
   `account that you will receive` and the `amount` as parameters,
   performs the `transfer of amounts`,
   making sure the amount is not above the existing balance.
+  With the aid of the function `delete/1`, it does not duplicate elements in the list.
 
   ## Examples
 
@@ -84,6 +85,12 @@ defmodule Account do
     end
   end
 
+  @doc """
+  Function that supports the functions `transfer/3` and` withdraw/2`,
+  where it deletes past accounts as parameters of these functions,
+  so that these functions can insert these accounts with their modified values,
+  thus avoiding duplication of elements in the list.
+  """
   def delete(accounts_delete) do
     Enum.reduce(accounts_delete, get_accounts(), fn a, acc -> List.delete(acc, a) end)
   end
@@ -91,20 +98,24 @@ defmodule Account do
   @doc """
   Function that when passing an `account` and a `value` as parameters,
   while this value being less than or equal to the one existing in the balance,
-  `makes the withdrawal`.
+  makes the withdrawal.
+  With the aid of the function `delete/1`, it does not duplicate elements in the list.
+
 
   ## Examples
+
       iex> account1 = Account.register_user(%User{name: "Douglas Oliveira", email: "xdouglas90@gmail.com"})
       %Account{
         balance: 1000,
         user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
       }
-      iex> Account.withdraw(account1, 10)
+      Account.withdraw(account1, 10)
       {:ok,
         %Account{
           balance: 990,
           user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
         }, "Withdrawal successful. Message forwarded by email!"}
+
   """
   def withdraw(account, value) do
     account = get_by_email(account)
