@@ -105,6 +105,145 @@ defmodule Transaction do
   def load_by_month(year, month),
     do: Enum.filter(load_transactions(), &(&1.date.year == year && &1.date.month == month))
 
+  @doc """
+  Function that loads the data by a day from the file `transactions.txt`
+  by passing a date (`~D[YYYY-MM-DD]`) as parameter and shows on the console.
+  Data received from a private function that stores the transaction history.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.load_by_year ~D[2021-03-26]
+      [
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ]
+
+  """
+  def load_by_day(date), do: Enum.filter(load_transactions(), &(&1.date == date))
+
+  @doc """
+  function that calculates the total value of transactions made in the `month` informed
+  as a parameter, using the data loaded by the function `load_by_month/2`.
+  Returns the transactions made and the total value in a tuple.
+  The calculation is done through a private function.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.total_by_month 2021, 03
+      {[
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        },
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ], 30}
+
+  """
+  def total_by_month(year, month) do
+    transactions = load_by_month(year, month)
+    {transactions, calculate(transactions)}
+  end
+
+  @doc """
+  function that calculates the total value of transactions made in the `year` informed
+  as a parameter, using the data loaded by the function `load_by_year/1`.
+  Returns the transactions made and the total value in a tuple.
+  The calculation is done through a private function.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.total_by_year 2021
+      {[
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        },
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ], 30}
+
+  """
+  def total_by_year(year) do
+    transactions = load_by_year(year)
+    {transactions, calculate(transactions)}
+  end
+
+  @doc """
+  function that calculates the total value of transactions made in the day with the date (`~D[YYYY-MM-DD]`) informed
+  as a parameter, using the data loaded by the function `load_by_day/1`.
+  Returns the transactions made and the total value in a tuple.
+  The calculation is done through a private function.
+
+
+  ## Examples
+
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
+      :ok
+      iex> Transaction.total_by_month ~D[2021-03-26]
+      {[
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        },
+        %Transaction{
+          date: ~D[2021-03-26],
+          from: "xdouglas90@gmail.com",
+          to: "juju.narnia@gmail.com",
+          type: "Transfer",
+          value: 15
+        }
+      ], 30}
+
+  """
+  def total_by_day(date) do
+    transactions = load_by_day(date)
+    {transactions, calculate(transactions)}
+  end
+
+  defp calculate(transactions) do
+    Enum.reduce(transactions, 0, fn x, acc -> acc + x.value end)
+  end
+
   defp get_transactions do
     {:ok, binary} = File.read(@transactions)
 
