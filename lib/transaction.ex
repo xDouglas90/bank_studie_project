@@ -6,11 +6,8 @@ defmodule Transaction do
   @transactions "transactions.txt"
 
   def save_transaction(type, from, value, date, to \\ nil) do
-    {:ok, binary} = File.read(@transactions)
-    transactions = binary
-    |> :erlang.binary_to_term()
     transactions =
-      transactions ++ [%__MODULE__{type: type, from: from, value: value, date: date, to: to}]
+      get_transactions() ++ [%__MODULE__{type: type, from: from, value: value, date: date, to: to}]
     File.write(@transactions, :erlang.term_to_binary(transactions))
   end
 
