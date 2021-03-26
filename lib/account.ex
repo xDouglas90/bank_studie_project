@@ -6,8 +6,10 @@ defmodule Account do
   @accounts "accounts.txt"
 
   @doc """
-  Function that creates a new account receiving data from the `User module` and passing a `balance` as a parameter,
-  according to the `defstruct user: User, balance: nil` created.
+  Function that creates a new account with the `struct` of the `user module` and the `balance`
+  as parameters. It checks if there is already an account registered with the email informed
+  through a private function, if not, it transforms the informed data
+  into binaries through `:erlang.term_to_binary/1` and saves it in a txt file `File.write/2`.
 
   ## Examples
 
@@ -17,9 +19,15 @@ defmodule Account do
   """
   def register_user(user) do
     accounts = get_accounts()
-    binary = [%__MODULE__{user: user}] ++ accounts
-    |> :erlang.term_to_binary()
-    File.write(@accounts, binary)
+    case get_by_email(user.email) do
+      nil ->
+        binary = [%__MODULE__{user: user}] ++ accounts
+        |> :erlang.term_to_binary()
+        File.write(@accounts, binary)
+      _ ->
+        {:error, "Account already registered!"}
+    end
+
   end
 
   defp get_accounts do
@@ -30,8 +38,8 @@ defmodule Account do
   defp get_by_email(email), do: Enum.find(get_accounts(), &(&1.user.email == email))
 
   @doc """
-  Function that when passing a `list of accounts`,
-  `account that will transfer`, `account that you will receive` and the `amount` as parameters,
+  Function that when passing an `account that will transfer`,
+  `account that you will receive` and the `amount` as parameters,
   performs the `transfer of amounts`,
   making sure the amount is not above the existing balance.
 
@@ -69,7 +77,7 @@ defmodule Account do
         }
       ]
   """
-  def transfer(_accounts, from, to, value) do
+  def transfer(from, to, value) do
     from = get_by_email(from.user.email)
 
     if balance_validate(from.balance, value) == true
