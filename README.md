@@ -1,4 +1,4 @@
-## defmodule BankStudieProject do
+# defmodule BankStudieProject do
 Small project to reinforce basic knowledge in [[Elixir]][elixir].
 
  - Basic sintax;
@@ -10,23 +10,18 @@ Small project to reinforce basic knowledge in [[Elixir]][elixir].
 
 For installing the language, follow the [official tutorial][install].
 
-## API Reference
-
-[TOCM]
-
-[TOC]
-
-### Modules
-#### Account
+# API Reference
+## Modules
+### Account
 Module that creates a new account based on the `struct` of `User` module.
-##### Functions
-###### delete/1
+#### Functions
+##### delete/1
  Function that supports the functions `transfer/3` and` withdraw/2`,
   where it deletes past accounts as parameters of these functions,
   so that these functions can insert these accounts with their modified values,
   thus avoiding duplication of elements in the list.
   
- ###### register_user/1
+ ##### register_user/1
    Function that creates a new account with the `struct` of the `user module` and the `balance`
   as parameters. It checks if there is already an account registered with the email informed
   through a private function, if not, it transforms the informed data
@@ -38,7 +33,7 @@ Module that creates a new account based on the `struct` of `User` module.
       %Account{balance: 1000, user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}}
 ```
 
-###### transfer/3
+##### transfer/3
   Function that when passing an `account that will transfer`,
   `account that you will receive` and the `amount` as parameters,
   performs the `transfer of amounts`,
@@ -59,7 +54,7 @@ Module that creates a new account based on the `struct` of `User` module.
         }
       ]
 ```
-###### withdraw/2
+##### withdraw/2
   Function that when passing an `account` and a `value` as parameters,
   while this value being less than or equal to the one existing in the balance,
   makes the withdrawal.
@@ -80,10 +75,10 @@ Module that creates a new account based on the `struct` of `User` module.
         }, "Withdrawal successful. Message forwarded by email!"}
 ```  
 
-#### Bank
+### Bank
 
-#### Transaction
-#### User
+### Transaction
+### User
 
 
 ```elixir
@@ -95,7 +90,7 @@ Module that creates a new account based on the `struct` of `User` module.
 ## End
 [elixir]: https://elixir-lang.org/ "Elixir"
 [install]: https://elixir-lang.org/getting-started/introduction.html#installation "official tutorial"
-## Installation
+## API Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `bank` to your list of dependencies in `mix.exs`:
