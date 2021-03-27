@@ -90,7 +90,7 @@ defmodule Transaction do
 
       iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
       :ok
-      iex> Transaction.load_by_year 2021, 03
+      iex> Transaction.load_by_month 2021, 03
       [
         %Transaction{
           date: ~D[2021-03-26],
@@ -115,7 +115,7 @@ defmodule Transaction do
 
       iex> Account.transfer "xdouglas90@gmail.com", "juju.narnia@gmail.com", 15
       :ok
-      iex> Transaction.load_by_year ~D[2021-03-26]
+      iex> Transaction.load_by_day ~D[2021-03-26]
       [
         %Transaction{
           date: ~D[2021-03-26],
@@ -130,7 +130,7 @@ defmodule Transaction do
   def load_by_day(date), do: Enum.filter(load_transactions(), &(&1.date == date))
 
   @doc """
-  function that calculates the total value of all transactions made, using the data loaded by the function `load_transactions/0`.
+    Function that calculates the total value of all transactions made, using the data loaded by the function `load_transactions/0`.
   Returns the transactions made and the total value in a tuple.
   The calculation is done through a private function.
 
@@ -163,7 +163,7 @@ defmodule Transaction do
   def total_transactions(), do: load_transactions() |> calculate
 
   @doc """
-  function that calculates the total value of transactions made in the `month` informed
+  Function that calculates the total value of transactions made in the `month` informed
   as a parameter, using the data loaded by the function `load_by_month/2`.
   Returns the transactions made and the total value in a tuple.
   The calculation is done through a private function.
@@ -197,7 +197,7 @@ defmodule Transaction do
   def total_by_month(year, month), do: load_by_month(year, month) |> calculate
 
   @doc """
-  function that calculates the total value of transactions made in the `year` informed
+  Function that calculates the total value of transactions made in the `year` informed
   as a parameter, using the data loaded by the function `load_by_year/1`.
   Returns the transactions made and the total value in a tuple.
   The calculation is done through a private function.
@@ -231,7 +231,7 @@ defmodule Transaction do
   def total_by_year(year), do: load_by_year(year) |> calculate
 
   @doc """
-  function that calculates the total value of transactions made in the day with the date (`~D[YYYY-MM-DD]`) informed
+  Function that calculates the total value of transactions made in the day with the date (`~D[YYYY-MM-DD]`) informed
   as a parameter, using the data loaded by the function `load_by_day/1`.
   Returns the transactions made and the total value in a tuple.
   The calculation is done through a private function.
