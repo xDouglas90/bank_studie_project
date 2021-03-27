@@ -160,10 +160,7 @@ defmodule Transaction do
       ], 30}
 
   """
-  def total_transactions() do
-    load_transactions()
-    |> calculate
-  end
+  def total_transactions(), do: load_transactions() |> calculate
 
   @doc """
   function that calculates the total value of transactions made in the `month` informed
@@ -197,10 +194,7 @@ defmodule Transaction do
       ], 30}
 
   """
-  def total_by_month(year, month) do
-    load_by_month(year, month)
-    |> calculate
-  end
+  def total_by_month(year, month), do: load_by_month(year, month) |> calculate
 
   @doc """
   function that calculates the total value of transactions made in the `year` informed
@@ -234,10 +228,7 @@ defmodule Transaction do
       ], 30}
 
   """
-  def total_by_year(year) do
-    load_by_year(year)
-    |> calculate
-  end
+  def total_by_year(year), do: load_by_year(year) |> calculate
 
   @doc """
   function that calculates the total value of transactions made in the day with the date (`~D[YYYY-MM-DD]`) informed
@@ -271,10 +262,7 @@ defmodule Transaction do
       ], 30}
 
   """
-  def total_by_day(date) do
-    load_by_day(date)
-    |> calculate
-  end
+  def total_by_day(date), do: load_by_day(date) |> calculate
 
   defp calculate(transactions) do
     {transactions, Enum.reduce(transactions, 0, fn x, acc -> acc + x.value end)}
