@@ -33,7 +33,7 @@ defmodule Account do
     end
   end
 
-  def get_accounts do
+  defp get_accounts() do
     {:ok, binary} = File.read(@accounts)
     :erlang.binary_to_term(binary)
   end
@@ -121,7 +121,7 @@ defmodule Account do
         balance: 1000,
         user: %User{email: "xdouglas90@gmail.com", name: "Douglas Oliveira"}
       }
-      Account.withdraw(account1, 10)
+      iex> Account.withdraw(account1, 10)
       {:ok,
         %Account{
           balance: 990,
